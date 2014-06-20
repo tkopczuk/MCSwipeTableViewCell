@@ -151,6 +151,11 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
 
 #pragma mark - View Manipulation
 
+- (void)updateContentViewScreenshotImage {
+    self.contentScreenshotView.image = [self imageWithView:self.contentView];
+    [self.contentScreenshotView sizeToFit];
+}
+
 - (void)setupSwipingView {
     if (_contentScreenshotView) {
         return;
@@ -162,8 +167,6 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         BOOL isBackgroundClear = [self.backgroundColor isEqual:[UIColor clearColor]];
         self.contentView.backgroundColor = isBackgroundClear ? [UIColor whiteColor] :self.backgroundColor;
     }
-    
-    UIImage *contentViewScreenshotImage = [self imageWithView:self];
     
     if (isContentViewBackgroundClear) {
         self.contentView.backgroundColor = nil;
@@ -178,7 +181,9 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     _slidingView.contentMode = UIViewContentModeCenter;
     [_colorIndicatorView addSubview:_slidingView];
     
-    _contentScreenshotView = [[UIImageView alloc] initWithImage:contentViewScreenshotImage];
+    _contentScreenshotView = [[UIImageView alloc] init];
+    [self updateContentViewScreenshotImage];
+    
     [self addSubview:_contentScreenshotView];
 }
 
@@ -709,6 +714,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         completionBlock(self, state, mode);
     }
     
+    [self updateContentViewScreenshotImage];
 }
 
 @end
